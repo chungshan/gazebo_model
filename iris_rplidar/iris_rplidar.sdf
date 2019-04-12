@@ -1,0 +1,121 @@
+<?xml version="1.0" ?>
+<sdf version='1.5'>
+  <model name='iris_rplidar'>
+        <static>false</static>
+    <include>
+      <uri>model://iris</uri>
+    </include> 
+
+	<include>
+	  <uri>model://payload</uri>
+		<pose>0.25 0.0 0.0 0 0 0</pose>
+   </include>
+<!--
+    <joint name="payload_link_joint" type="fixed">
+      <parent>iris_rplidar::iris::base_link</parent>
+      <child>iris_rplidar::payload2::payload_first_link</child>
+      <pose>-0.00 0.0 0.15 0 0.0 0.0</pose>
+    </joint>
+-->
+    <joint name="payload_link_drone_joint" type="revolute2">
+      <parent>iris_rplidar::iris::base_link</parent>
+      <child>iris_rplidar::payload::payload_link</child>
+      <pose>-0.00 0.0 -0.25 0 0.0 0.0</pose>
+
+      <axis>
+        <xyz>1 0 0</xyz>
+		<dynamics>
+		<damping> 1.0 </damping>
+		<spring_stiffness> 4.5 </spring_stiffness>
+		</dynamics>
+		<limit>
+		   <lower>-0.01</lower>
+		   <upper>0.01</upper>
+		</limit>
+      </axis>
+
+      <axis2>
+        <xyz>0 1 0</xyz>
+		<dynamics>
+		<damping> 1 </damping>
+		<spring_stiffness> 0.45 </spring_stiffness>
+		</dynamics>	
+<!--
+		<limit>
+		   <lower>-0.01</lower>
+		   <upper>0.01</upper>
+		</limit>	
+-->
+      </axis2>
+
+	 <physics>
+	 <ode>
+	 <provide_feedback>true</provide_feedback>
+	 			<implicit_spring_damper>true</implicit_spring_damper>
+	 </ode>
+	 </physics>
+	 <sensor name="force_torque" type="force_torque">
+      <update_rate>200</update_rate>
+	  <always_on>true</always_on>
+     </sensor>
+
+    </joint>
+		<plugin name="ft_sensor" filename="libgazebo_ros_ft_sensor.so">
+			  <always_on>true</always_on>
+            <updateRate>200.0</updateRate>
+            <topicName>/ft_sensor</topicName>
+		            <jointName>payload_link_drone_joint</jointName>
+        </plugin>
+
+<!--
+<include>
+	  <uri>model://cable</uri>
+		<pose>0.025 0 -0.050 0 0 0</pose>
+   </include>
+
+ <joint name="cable_drone_joint" type="revolute2">
+      <parent>iris_rplidar::iris::base_link</parent>
+      <child>iris_rplidar::cable::link_01</child>
+      <pose>-0.025 0.0 0.0 0 0.0 0.0</pose>
+
+      <axis>
+        <xyz>0 0 1</xyz>
+		<dynamics>
+		<damping> 1.0 </damping>
+		<spring_stiffness> 4.5 </spring_stiffness>
+		</dynamics>
+		<limit>
+		   <lower>-0.01</lower>
+		   <upper>0.01</upper>
+		</limit>
+      </axis>
+
+      <axis2>
+        <xyz>0 1 0</xyz>
+		<dynamics>
+		<damping> 1.0 </damping>
+		<spring_stiffness> 4.5 </spring_stiffness>
+		</dynamics>	
+		<limit>
+		   <lower>-0.01</lower>
+		   <upper>0.01</upper>
+		</limit>	
+      </axis2>
+
+	 <physics>
+	 <ode>
+	 <provide_feedback>true</provide_feedback>
+	 			<implicit_spring_damper>true</implicit_spring_damper>
+	 </ode>
+	 </physics>
+	 <sensor name="force_torque" type="force_torque">
+      <update_rate>100</update_rate>
+	  <always_on>true</always_on>
+     </sensor>
+
+    </joint>
+-->
+  </model>
+</sdf>
+<!-- vim: set noet fenc=utf-8 ff=unix sts=0 sw=4 ts=4 : -->
+
